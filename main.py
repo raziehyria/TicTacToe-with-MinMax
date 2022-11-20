@@ -11,15 +11,28 @@ algorithm i.e., AI vs the player. (2 implementations – one using minimax and o
 alpha beta pruning)
 Your program should allow the user to play and complete the game
 """
-board = {1: ' ', 2: ' ', 3: ' ',
-         4: ' ', 5: ' ', 6: ' ',
-         7: ' ', 8: ' ', 9: ' '}
-board2 = TicTacToe(board)  # new game object
+b1 = {1: ' ', 2: ' ', 3: ' ',
+      4: ' ', 5: ' ', 6: ' ',
+      7: ' ', 8: ' ', 9: ' '}
 
-while not board2.check_winner():  # while a winner doesnt exist, allow each player to make a move
-    board2.computer_move()
-    board2.player_move()
+b2 = {1: ' ', 2: ' ', 3: ' ',
+      4: ' ', 5: ' ', 6: ' ',
+      7: ' ', 8: ' ', 9: ' '}
+board1 = TicTacToe(b1)  # new game object
+board2 = TicTacToe(b1)
+print("Welcome to tic tac toe. Player is o. AI is x. Ai gets first move. Cheats on.")
+# minimax play
+'''print("Min max solution")
+while not board1.check_winner():  # while a winner doesnt exist, allow each player to make a move
+    board1.computer_move()
+    board1.player_move()'''
 
+# alpha beta minimax play
+'''print("Alpha beta solution")
+while not board2.check_winner():
+    board2.ab_computer_move()
+    board2.optimalmoves()
+    board2.player_move()'''
 
 '''
 Part-2:
@@ -29,3 +42,11 @@ outputs an optimal move for the player i.e., optimal state.
 For  example,  consider  the  below  input.  You  are  the  "X"  player,  it  is  your  turn  to  move, 
 and the current board configuration is shown below:
 '''
+
+new_state = {1: ' ', 2: ' ', 3: 'o',
+             4: 'x', 5: 'o', 6: 'o',
+             7: ' ', 8: ' ', 9: 'x'}
+t = TicTacToe(new_state)
+t.print_board()
+print("Your optimal moves are:")
+optimal_move = t.optimalmoves()

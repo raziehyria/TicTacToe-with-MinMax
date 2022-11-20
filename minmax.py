@@ -37,3 +37,16 @@ class MinImax:
                     board[key] = ' '
                     maxScore = min(maxScore, bestscore)
             return maxScore
+
+    def mm_optimalMove(self, board):
+        maxscore = -100
+        bestscore = 0
+        for key in board.keys():
+            if board[key] == ' ':
+                board[key] = 'o'
+                move = self.minimax(board, 0, False)
+                board[key] = ' '
+                if move > maxscore:
+                    bestscore = key
+                    maxscore = move
+        return bestscore

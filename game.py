@@ -2,6 +2,7 @@
 Game class to house all the basic features for a tictactoe game
 '''
 from minmax import MinImax
+from abminmax import ABMinmax
 
 
 class TicTacToe:
@@ -11,6 +12,7 @@ class TicTacToe:
         self.player = 'o'
         self.computer = 'x'
         self.mm = MinImax()
+        self.ab = ABMinmax()
 
         # comparisons we will be using later on
         # win states for the board
@@ -130,6 +132,7 @@ class TicTacToe:
 
     # player move -- move into main py
     def player_move(self):
+        print("Players's turn...")
         position = int(input("Enter Position for 'o': "))
         self.insert_move(self.player, position)
         return
@@ -138,6 +141,7 @@ class TicTacToe:
     def computer_move(self):
         maxscore = -10
         bestmove = 0
+        print("Computer's turn...")
         for key in self.board_state.keys():
             if self.board_state[key] == ' ':
                 self.board_state[key] = self.computer
@@ -149,8 +153,32 @@ class TicTacToe:
         self.insert_move(self.computer, bestmove)
         return
 
+    def ab_computer_move(self):
+        maxscore = -10
+        alpha = -10
+        beta = 10
+        bestmove = 0
+        print("Computer's turn...")
+        for key in self.board_state.keys():
+            if self.board_state[key] == ' ':
+                self.board_state[key] = self.computer
+                score = self.ab.abminimax(self.board_state, 0, False, alpha, beta)
+                self.board_state[key] = ' '
+                if score > maxscore:
+                    maxscore = score
+                    bestmove = key
+        self.insert_move(self.computer, bestmove)
+        return
 
-# testing
+    def optimalmoves(self):
+        ab = self.ab.ab_optimalMove(self.board_state)
+        mm = self.mm.mm_optimalMove(self.board_state)
+        print("Alpha beta optimal move is: ", ab)
+        print("Min max optimal move is: ", mm)
+
+    # testing
+
+
 '''board = Game()
 board.print_board()
 board.insert_move('x', 1)
