@@ -2,39 +2,38 @@
 minimax class to house the main algorithms and functions used for minimax algorithm
 """
 
+
 class MinImax:
+    def minimax(self, board, depth, maxplayer):
+        from game import TicTacToe
+        ttt = TicTacToe(board)
+        draw = ttt.check_draw()
 
-    def __init__(self):
-        self.board = {}
-
-    def minimax(self, computer, player, board, limit, maximum, winningletter, checkdraw):
-
-        if winningletter(player):
+        if ttt.winning_letter('x'):  # ai
             return 1
-        elif winningletter(player):
+
+        elif ttt.winning_letter('o'):  # player
             return -1
-        elif checkdraw:
+
+        elif draw:
             return 0
 
-        if maximum:
-            maxScore = -1000
+        if maxplayer:
+            maxScore = -100
             for key in board.keys():
                 if board[key] == ' ':
-                    board[key] = computer
-                    score = self.minimax(self, computer, player, board, limit+1, maximum, winningletter, checkdraw)
+                    board[key] = 'x'
+                    bestscore = self.minimax(board, depth + 1, False)
                     board[key] = ' '
-                    if score > maxScore:
-                        bestScore = max(maxScore,score)
+                    maxScore = max(maxScore, bestscore)
             return maxScore
 
         else:
-            maxScore = 1000
+            maxScore = 100
             for key in board.keys():
                 if board[key] == ' ':
-                    board[key] = player
-                    score = self.minimax(self, computer,player, board, limit-1, maximum, winningletter, checkdraw)
+                    board[key] = 'o'
+                    bestscore = self.minimax(board, depth + 1, True)
                     board[key] = ' '
-                    if score < maxScore:
-                        maxScore = min(maxScore,score)
-
+                    maxScore = min(maxScore, bestscore)
             return maxScore

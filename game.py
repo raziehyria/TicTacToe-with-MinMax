@@ -1,53 +1,44 @@
 '''
 Game class to house all the basic features for a tictactoe game
 '''
-
 from minmax import MinImax
 
 
-class Game:
-    def __init__(self):
+class TicTacToe:
+    def __init__(self, board):
         # initialize board using a dictionary
-        self.board_state = {1: ' ', 2: ' ', 3: ' ',
-                            4: ' ', 5: ' ', 6: ' ',
-                            7: ' ', 8: ' ', 9: ' '}
-        self.player = 'x'
-        self.computer = 'o'
+        self.board_state = board
+        self.player = 'o'
+        self.computer = 'x'
+        self.mm = MinImax()
 
         # comparisons we will be using later on
-        #win states for the board
-        self.cases = {
-            "top": self.board_state[1] == self.board_state[2] and self.board_state[1] == self.board_state[3] and
-                   self.board_state[1],
-            "mid": self.board_state[4] == self.board_state[5] and self.board_state[4] == self.board_state[6] and
-                   self.board_state[4],
-            "bot": self.board_state[7] == self.board_state[8] and self.board_state[7] == self.board_state[9] and
-                   self.board_state[7],
-            "left": self.board_state[1] == self.board_state[4] and self.board_state[1] == self.board_state[7] and
-                    self.board_state[1],
-            "center": self.board_state[2] == self.board_state[5] and self.board_state[2] == self.board_state[8] and
-                      self.board_state[2],
-            "right": self.board_state[3] == self.board_state[6] and self.board_state[3] == self.board_state[9] and
-                     self.board_state[3],
-            "ldiag": self.board_state[1] == self.board_state[5] and self.board_state[1] == self.board_state[9] and
-                     self.board_state[1],
-            "rdiag": self.board_state[7] == self.board_state[5] and self.board_state[7] == self.board_state[3] and
-                     self.board_state[7]
+        # win states for the board
+        '''self.cases = {
+            "top": self.board_state[1] == self.board_state[2] and self.board_state[1] == self.board_state[3],
+            "mid": self.board_state[4] == self.board_state[5] and self.board_state[4] == self.board_state[6],
+            "bot": self.board_state[7] == self.board_state[8] and self.board_state[7] == self.board_state[9],
+            "left": self.board_state[1] == self.board_state[4] and self.board_state[1] == self.board_state[7],
+            "center": self.board_state[2] == self.board_state[5] and self.board_state[2] == self.board_state[8],
+            "right": self.board_state[3] == self.board_state[6] and self.board_state[3] == self.board_state[9],
+            "ldiag": self.board_state[1] == self.board_state[5] and self.board_state[1] == self.board_state[9],
+            "rdiag": self.board_state[7] == self.board_state[5] and self.board_state[7] == self.board_state[3]
         }
+'''
 
     # print board
     def print_board(self):
         # values in board correspond to key in dictionary
-        print(self.board_state[1] + '|' + self.board_state[2] + '|' + self.board_state[3]) #first row
+        print(self.board_state[1] + '|' + self.board_state[2] + '|' + self.board_state[3])  # first row
         print('-+-+-')
-        print(self.board_state[4] + '|' + self.board_state[5] + '|' + self.board_state[6]) #second row
+        print(self.board_state[4] + '|' + self.board_state[5] + '|' + self.board_state[6])  # second row
         print('-+-+-')
-        print(self.board_state[7] + '|' + self.board_state[8] + '|' + self.board_state[9]) #third
+        print(self.board_state[7] + '|' + self.board_state[8] + '|' + self.board_state[9])  # third
         print("\n")
 
     # check if space is free
     def open_space(self, pos):
-        if self.board_state[pos] == ' ': # if the space is empty
+        if self.board_state[pos] == ' ':  # if the space is empty
             return True  # returns true if it's an open space
         else:
             return False
@@ -60,41 +51,57 @@ class Game:
         return True  # otherwise, all positions are full and its a draw
 
     def check_winner(self):  # this function will check and see if any of the win states are met on the board
-        if self.cases == 'top' != ' ':
+        if self.board_state[1] == self.board_state[2] and self.board_state[1] == self.board_state[3] \
+                and self.board_state[1] != ' ':
             return True
-        elif self.cases == 'mid' != ' ':
+        elif self.board_state[4] == self.board_state[5] and self.board_state[4] == self.board_state[6] \
+                and self.board_state[4] != ' ':
             return True
-        elif self.cases == 'bot' != ' ':
+        elif self.board_state[7] == self.board_state[8] and self.board_state[7] == self.board_state[9] \
+                and self.board_state[7] != ' ':
             return True
-        elif self.cases == 'left' != ' ':
+        elif self.board_state[1] == self.board_state[4] and self.board_state[1] == self.board_state[7] \
+                and self.board_state[1] != ' ':
             return True
-        elif self.cases == 'center' != ' ':
+        elif self.board_state[2] == self.board_state[5] and self.board_state[2] == self.board_state[8] \
+                and self.board_state[2] != ' ':
             return True
-        elif self.cases == 'right' != ' ':
+        elif self.board_state[3] == self.board_state[6] and self.board_state[3] == self.board_state[9] \
+                and self.board_state[3] != ' ':
             return True
-        elif self.cases == 'ldiag' != ' ':
+        elif self.board_state[1] == self.board_state[5] and self.board_state[1] == self.board_state[9] \
+                and self.board_state[1] != ' ':
             return True
-        elif self.cases == 'rdiag' != ' ':
+        elif self.board_state[7] == self.board_state[5] and self.board_state[7] == self.board_state[3] \
+                and self.board_state[7] != ' ':
             return True
         else:
             return False
 
     def winning_letter(self, letter):  # check which letter accomplished that win state
-        if self.cases == 'top' == letter:
+        if self.board_state[1] == self.board_state[2] and self.board_state[1] == self.board_state[3] \
+                and self.board_state[1] == letter:
             return True
-        elif self.cases == 'mid' == letter:
+        elif self.board_state[4] == self.board_state[5] and self.board_state[4] == self.board_state[6] \
+                and self.board_state[4] == letter:
             return True
-        elif self.cases == 'bot' == letter:
+        elif self.board_state[7] == self.board_state[8] and self.board_state[7] == self.board_state[9] \
+                and self.board_state[7] == letter:
             return True
-        elif self.cases == 'left' == letter:
+        elif self.board_state[1] == self.board_state[4] and self.board_state[1] == self.board_state[7] \
+                and self.board_state[1] == letter:
             return True
-        elif self.cases == 'center' == letter:
+        elif self.board_state[2] == self.board_state[5] and self.board_state[2] == self.board_state[8] \
+                and self.board_state[2] == letter:
             return True
-        elif self.cases == 'right' == letter:
+        elif self.board_state[3] == self.board_state[6] and self.board_state[3] == self.board_state[9] \
+                and self.board_state[3] == letter:
             return True
-        elif self.cases == 'ldiag' == letter:
+        elif self.board_state[1] == self.board_state[5] and self.board_state[1] == self.board_state[9] \
+                and self.board_state[1] == letter:
             return True
-        elif self.cases == 'rdiag' == letter:
+        elif self.board_state[7] == self.board_state[5] and self.board_state[7] == self.board_state[3] \
+                and self.board_state[7] == letter:
             return True
         else:
             return False
@@ -108,7 +115,7 @@ class Game:
                 print("Draw!")
                 exit()
             if self.check_winner():
-                if letter == 'x':  # checks to see if the inserted layer belongs to the computer or the player
+                if letter == 'o':  # checks to see if the inserted layer belongs to the computer or the player
                     print("Player wins!")  # then if the win state is met, they win
                     exit()  # exit from the player input
                 else:
@@ -123,20 +130,18 @@ class Game:
 
     # player move -- move into main py
     def player_move(self):
-        position = int(input("Enter Position for 'x': "))
+        position = int(input("Enter Position for 'o': "))
         self.insert_move(self.player, position)
         return
 
     # computer moves
     def computer_move(self):
-        mmo = MinImax()
-        maxscore = -1000
+        maxscore = -10
         bestmove = 0
         for key in self.board_state.keys():
-            if self.board_state == ' ':
+            if self.board_state[key] == ' ':
                 self.board_state[key] = self.computer
-                score = mmo.minimax(self.computer, self.player, self.board_state, 0, False, self.winning_letter(),
-                                    self.check_draw())
+                score = self.mm.minimax(self.board_state, 0, False)
                 self.board_state[key] = ' '
                 if score > maxscore:
                     maxscore = score
