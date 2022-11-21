@@ -8,11 +8,11 @@ from abminmax import ABMinmax
 class TicTacToe:
     def __init__(self, board):
         # initialize board using a dictionary
-        self.board_state = board
+        self.board_state = board  # board state can be hardcoded or input for each game.
         self.player = 'o'
         self.computer = 'x'
-        self.mm = MinImax()
-        self.ab = ABMinmax()
+        self.mm = MinImax()  # min max object
+        self.ab = ABMinmax()  # alpha beta object
 
         # comparisons we will be using later on
         # win states for the board
@@ -52,59 +52,61 @@ class TicTacToe:
                 return False
         return True  # otherwise, all positions are full and its a draw
 
-    def check_winner(self):  # this function will check and see if any of the win states are met on the board
+    # this function will check and see if any of the win states are met on the board
+    def check_winner(self):
         if self.board_state[1] == self.board_state[2] and self.board_state[1] == self.board_state[3] \
                 and self.board_state[1] != ' ':
-            return True
+            return True  # top row
         elif self.board_state[4] == self.board_state[5] and self.board_state[4] == self.board_state[6] \
                 and self.board_state[4] != ' ':
-            return True
+            return True  # middle row
         elif self.board_state[7] == self.board_state[8] and self.board_state[7] == self.board_state[9] \
                 and self.board_state[7] != ' ':
-            return True
+            return True  # bottom row
         elif self.board_state[1] == self.board_state[4] and self.board_state[1] == self.board_state[7] \
                 and self.board_state[1] != ' ':
-            return True
+            return True  # left column
         elif self.board_state[2] == self.board_state[5] and self.board_state[2] == self.board_state[8] \
                 and self.board_state[2] != ' ':
-            return True
+            return True  # center column
         elif self.board_state[3] == self.board_state[6] and self.board_state[3] == self.board_state[9] \
                 and self.board_state[3] != ' ':
-            return True
+            return True  # right column
         elif self.board_state[1] == self.board_state[5] and self.board_state[1] == self.board_state[9] \
                 and self.board_state[1] != ' ':
-            return True
+            return True  # left diagonal
         elif self.board_state[7] == self.board_state[5] and self.board_state[7] == self.board_state[3] \
                 and self.board_state[7] != ' ':
-            return True
+            return True  # right diagonal
         else:
             return False
 
-    def winning_letter(self, letter):  # check which letter accomplished that win state
+    # check which letter accomplished said win state
+    def winning_letter(self, letter):
         if self.board_state[1] == self.board_state[2] and self.board_state[1] == self.board_state[3] \
                 and self.board_state[1] == letter:
-            return True
+            return True  # top row
         elif self.board_state[4] == self.board_state[5] and self.board_state[4] == self.board_state[6] \
                 and self.board_state[4] == letter:
-            return True
+            return True  # middle row
         elif self.board_state[7] == self.board_state[8] and self.board_state[7] == self.board_state[9] \
                 and self.board_state[7] == letter:
-            return True
+            return True  # bottom row
         elif self.board_state[1] == self.board_state[4] and self.board_state[1] == self.board_state[7] \
                 and self.board_state[1] == letter:
-            return True
+            return True  # left column
         elif self.board_state[2] == self.board_state[5] and self.board_state[2] == self.board_state[8] \
                 and self.board_state[2] == letter:
-            return True
+            return True  # center column
         elif self.board_state[3] == self.board_state[6] and self.board_state[3] == self.board_state[9] \
                 and self.board_state[3] == letter:
-            return True
+            return True  # right column
         elif self.board_state[1] == self.board_state[5] and self.board_state[1] == self.board_state[9] \
                 and self.board_state[1] == letter:
-            return True
+            return True  # left diagonal
         elif self.board_state[7] == self.board_state[5] and self.board_state[7] == self.board_state[3] \
                 and self.board_state[7] == letter:
-            return True
+            return True  # right diagonal
         else:
             return False
 
@@ -113,14 +115,14 @@ class TicTacToe:
         if self.open_space(pos):  # if it's an open space
             self.board_state[pos] = letter  # insert the letter
             print(self.print_board())  # print board each time a letter is inserted
-            if self.check_draw():  # ref check draw function,
+            if self.check_draw():  # check to see if there currently exists a draw,
                 print("Draw!")
-                exit()
-            if self.check_winner():
-                if letter == 'o':  # checks to see if the inserted layer belongs to the computer or the player
-                    print("Player wins!")  # then if the win state is met, they win
+                exit()  # and exit the game
+            if self.check_winner():  # other wise, check to see if any win states have occurred
+                if letter == 'o':  # checks to see if the inserted letter belongs to the computer or the player
+                    print("Player wins!")  # and they win
                     exit()  # exit from the player input
-                else:
+                else:  # other wise the opposing player wins
                     print("Computer wins!")
                     exit()
             return
@@ -130,55 +132,58 @@ class TicTacToe:
             self.insert_move(letter, position)  # recurse to accommodate new move
             return
 
-    # player move -- move into main py
+    # player move --
     def player_move(self):
         print("Players's turn...")
-        position = int(input("Enter Position for 'o': "))
+        position = int(input("Enter Position for 'o': "))  # use user input to insert value to key
         self.insert_move(self.player, position)
         return
 
-    # computer moves
+    # function that controls the AI, or computer movement using only minmax function
     def computer_move(self):
-        maxscore = -10
-        bestmove = 0
+        maxscore = -10  # arbitrary number used for maximizing
+        bestmove = 0  # number used to keep track of optimized position or key value
         print("Computer's turn...")
-        for key in self.board_state.keys():
-            if self.board_state[key] == ' ':
-                self.board_state[key] = self.computer
-                score = self.mm.minimax(self.board_state, 0, False)
-                self.board_state[key] = ' '
-                if score > maxscore:
+        for key in self.board_state.keys():  # so for every key or location on the board
+            if self.board_state[key] == ' ':  # if there is an empty spot
+                self.board_state[key] = self.computer  # insert that move
+                score = self.mm.minimax(self.board_state, 0, False)  # check its score with minmax
+                self.board_state[key] = ' '  # and undo the move
+                if score > maxscore:  # and keep repeating until the best move is found
                     maxscore = score
                     bestmove = key
-        self.insert_move(self.computer, bestmove)
+        self.insert_move(self.computer, bestmove)  # the optimized key with greatest value get sent to be inserted
         return
 
+    # function that controls the AI, or computer movement using alpha beta
     def ab_computer_move(self):
-        maxscore = -10
-        alpha = -10
-        beta = 10
-        bestmove = 0
+        maxscore = -10  # arbitrary number used for maximizing
+        alpha = -10  # arbitrary max for alpha beta
+        beta = 10  # arbitrary min for alpha beta
+        bestmove = 0  # number used to keep track of optimized position or key value
         print("Computer's turn...")
-        for key in self.board_state.keys():
+        for key in self.board_state.keys():  # for every key or location on the board
             if self.board_state[key] == ' ':
                 self.board_state[key] = self.computer
-                score = self.ab.abminimax(self.board_state, 0, False, alpha, beta)
+                score = self.ab.abminimax(self.board_state, 0, False, alpha, beta)  # send to AB function for score
                 self.board_state[key] = ' '
-                if score > maxscore:
+                if score > maxscore:  # and keep repeating until the best move is found
                     maxscore = score
                     bestmove = key
-        self.insert_move(self.computer, bestmove)
+        self.insert_move(self.computer, bestmove) # the optimized key with greatest value get sent to be inserted
         return
 
-    def optimalmoves(self):
-        ab = self.ab.ab_optimalMove(self.board_state)
-        mm = self.mm.mm_optimalMove(self.board_state)
-        print("Alpha beta optimal move is: ", ab)
-        print("Min max optimal move is: ", mm)
+    # function to return the optimal moves to the player
+    def optimalmoves(self, player):
+        if player == 'o':  # for the live game, the ai has to optimization methods change depending on target letter
+            print("Min Max optimal move is: ", self.mm.mm_optimalMove(self.board_state))  # for player
+        else:  # for x, or ai
+            print("Alpha beta optimal move is: ", self.ab.ab_optimalMove(self.board_state))  # prints the optimal move
 
-    # testing
+        # return self.ab.ab_optimalMove(self.board_state, player), self.mm.mm_optimalMove(self.board_state, player)
 
 
+# testing
 '''board = Game()
 board.print_board()
 board.insert_move('x', 1)
